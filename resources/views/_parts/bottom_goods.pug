@@ -1,0 +1,20 @@
+.line
+.content-head__container
+    .content-head__title-wrap
+        .content-head__title-wrap__title.bcg-title
+            | Посмотрите наши товары
+.content-main__container
+    .products-columns
+        each product in random_products
+            .products-columns__item
+                .products-columns__item__title-product
+                    a(href="/product/" + product.id).products-columns__item__title-product__link
+                        | #{product.title}
+                .products-columns__item__thumbnail
+                    a(href="/product/" + product.id).products-columns__item__thumbnail__link
+                        img(src=product.image_url, alt="Preview-image").products-columns__item__thumbnail__img
+                .products-columns__item__description
+                    span.products-price
+                        | #{product.price} руб.
+                    a(href="#" data-product_id=product.id).btn.btn-blue
+                        | Купить

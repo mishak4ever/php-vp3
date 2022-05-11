@@ -1,0 +1,25 @@
+.content-head__container
+    .content-head__title-wrap
+        .content-head__title-wrap__title.bcg-title
+            | #{product.title} в разделе #{category.title}
+    .content-head__search-block
+        .search-container
+            form.search-container__form
+                input(type='text').search-container__form__input
+                button.search-container__form__btn
+                    | search
+.content-main__container
+    .product-container
+        .product-container__image-wrap
+            img(src=product.image_url).image-wrap__image-product
+        .product-container__content-text
+            .product-container__content-text__title
+                |  #{product.title}
+            .product-container__content-text__price
+                .product-container__content-text__price__value
+                    | Цена: <b>#{product.price}</b>
+                    | руб
+                a(href="#" data-product_id=product.id).btn.btn-blue
+                    | Купить
+            .product-container__content-text__description 
+                p !{product.description}

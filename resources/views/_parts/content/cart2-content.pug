@@ -1,0 +1,43 @@
+.content-head__container
+    .content-head__title-wrap
+        .content-head__title-wrap__title.bcg-title
+            | Моя Корзина
+    .content-head__search-block
+        .search-container
+            form.search-container__form(action="/cart/clear")
+                button(type='submit').cart-container__form__btn
+                    | Очистить
+//                input(type='text').search-container__form__input
+.cart-product-list
+    each product in cart_products
+        .cart-product-list__item
+            .cart-product__item__product-photo
+                a(href="/product/" + product.id)
+                    img(src=product.image_url, alt="Preview-image").cart-product__item__product-photo__image
+            .cart-product__item__product-name
+                .cart-product__item__product-name__content
+                    a(href="/product/" + product.id)=product.title
+            .cart-product__item__cart-date
+                .cart-product__item__cart-date__content
+                    a(href="/cart/delete/" + product.id).btn.btn-red
+                        | Удалить
+            .cart-product__item__product-price
+                span.product-price__value
+                    | #{product.price} рублей
+    .cart-product-list__result-item
+        .cart-product-list__result-item__text
+            | Итого
+        .cart-product-list__result-item__value
+            | #{total_cost} рублей
+.text-container
+    form.text-container__form(action="/cart/add_order" method="POST")
+        - var csrf = csrf_token()
+        input(type="hidden", name="_token", value=csrf)
+        .form-row
+            label.text-container__form__label(for='user_email') Ваше Email
+            input(type='text' name='user_email', value=logged_user.email, id='user_email' required).text-container__form__input
+        .form-row
+            label.text-container__form__label(for='user_name') Ваше Имя
+            input(type='text' name='user_name', value=logged_user.name, id='user_name' required).text-container__form__input
+        .content-form_button__container
+            include ../btn-buy

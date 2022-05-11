@@ -1,0 +1,24 @@
+if page > 0
+    - var pg_page = page
+else 
+    - var pg_page = 1
+if total_pages > 0
+    - var pg_total_pages = total_pages
+else 
+    - var pg_total_pages = 1
+ul.page-nav
+    if pg_page > 1
+        - p = pg_page - 1
+        li.page-nav__item
+            a(href="page/" + p).page-nav__item__link
+                i.fa.fa-angle-double-left
+    - for (n = 1; n <= pg_total_pages; n++) {
+        - var current = (pg_page == n);
+        li.page-nav__item
+            a(class=(current ? 'page-nav__item__link--active' : '') href="page/" + n ).page-nav__item__link=n
+    - }
+    if pg_page < pg_total_pages
+        - p = pg_page + 1
+        li.page-nav__item
+            a(href="page/" + p).page-nav__item__link
+                i.fa.fa-angle-double-right

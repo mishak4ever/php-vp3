@@ -1,0 +1,22 @@
+.content-head__container
+    .content-head__title-wrap
+        .content-head__title-wrap__title.bcg-title
+            | Мои заказы
+    .content-head__search-block
+        .search-container
+            form.search-container__form
+                input(type='text').search-container__form__input
+                button.search-container__form__btn
+                    | search
+.content-main__container
+    .cart-product-list
+        each order in orders
+            .cart-product-list__item
+                .cart-product__item__product-name
+                    .cart-product__item__product-name__content
+                        a(href="/order/" + order.id)=order.title
+                .cart-product__item__product-price
+                    span.product-price__value
+                        | #{order.cost} рублей
+.content-footer__container
+    include ../pagination
