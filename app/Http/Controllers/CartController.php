@@ -6,13 +6,16 @@ use Illuminate\Http\Request;
 use App\Models\Product;
 use App\Models\User;
 use App\Models\Order;
+use App\Models\Settings;
+use App\Mail\ModelEmail;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Auth;
 
 class CartController extends MagazineController
 {
 
     public $cart_products = null;
-
 
     public function index()
     {
@@ -32,7 +35,7 @@ class CartController extends MagazineController
             'magazine_categories' => $this->getMagazineCategories(),
             'cart_products' => $products ?? [],
             'total_cost' => $total_cost,
-            'cart_goods_count' => count($cart_products),
+            'cart_goods_count' => $cart_products ? count($cart_products) : 0,
             'logged_user' => $this->getAuthUser(),
         ]);
     }
@@ -57,7 +60,7 @@ class CartController extends MagazineController
 
     public function getCount()
     {
-        return count($this->cartGetGoods());
+        return $this->cartGetGoods() ? count($this->cartGetGoods()) : 0;
     }
 
     public function addOrder(Request $request)
@@ -69,11 +72,12 @@ class CartController extends MagazineController
             foreach ($cart_products as $prod_id) {
                 $product = Product::find($prod_id);
                 $total_cost += $product->price;
-                $categories[] = $product->category;
+                $categories[] = $product->category->id;
             }
         }
         $order_form = $request->post();
         $user = User::where('email', $order_form['user_email'])->first();
+        $registered = 0;
         if ($user) {
 //            dd($user);
         } else {
@@ -85,6 +89,15 @@ class CartController extends MagazineController
                             ]
             );
             $user->save();
+            $registered = 1;
+            $registerMailModel = (new ModelEmail([
+                        'name' => $user->name,
+                        'email' => $user->email,
+                        'password' => $generate_pass,
+                        'sender' => 'Администрация сайта',
+                        'sitename' => env('APP_URL', 'SiteName'),
+                            ]))->setTheme('Регистрация на сайте');
+            Mail::to($user->email)->send($registerMailModel);
         }
         $order = Order::create([
                     "title" => "Заказ от " . date("d.m.Y"),
@@ -95,8 +108,20 @@ class CartController extends MagazineController
                     "complete" => 0,
                     "cost" => $total_cost,
         ]);
+        $orderMailModel = (new ModelEmail([
+                    'name' => $user->name,
+                    'email' => $user->email,
+                    'order_id' => $order->id,
+                    'sender' => 'Администрация сайта',
+                    'sitename' => env('APP_URL', 'SiteName'),
+                        ], 'mail.order'))->setTheme('Заказ на сайте');
+        $default_manager_email = Settings::where('key', 'default_user_email')->first()->value;
+        Mail::to($default_manager_email)->send($orderMailModel);
+        Mail::to($user->email)->send($orderMailModel);
+        Auth::login($user);
         $this->cartClearGoods();
-        return redirect()->action([OrderController::class, 'index']);
+//        return redirect()->action([OrderController::class, 'index'], ['page' => 1, 'registered' => 1]);
+        return redirect()->route('orders.index.page', ['indexPage' => 1])->with(['registered' => $registered]);
     }
 
 }

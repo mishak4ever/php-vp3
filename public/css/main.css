@@ -1231,3 +1231,13 @@ a img.aligncenter {
     height: 100%;
     /*color: #666;*/
 }
+
+
+.order-list__order-welcome {
+    font-size: 18px;
+    font-family: "PT_Sans", sans-serif;
+    color: darkred;
+    font-weight: bold;
+    line-height: 18px;
+    padding: 0 0 10px;
+}

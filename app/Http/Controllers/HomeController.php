@@ -23,7 +23,7 @@ class HomeController extends MagazineController
     }
 
     /**
-     * Show the application dashboard.
+     * Show the application home page.
      *
      * @return \Illuminate\Contracts\Support\Renderable
      */
@@ -43,6 +43,36 @@ class HomeController extends MagazineController
             'products' => $products,
             'total_pages' => $total_pages,
             'page' => $page,
+            'logged_user' => $this->getAuthUser(),
+        ]);
+    }
+
+    /**
+     * Show the application about page.
+     *
+     * @return \Illuminate\Contracts\Support\Renderable
+     */
+    public function about()
+    {
+
+        return view('about', [
+            'magazine_categories' => $this->getMagazineCategories(),
+            'random_products' => $this->getMagazineRandomProducts(),
+            'logged_user' => $this->getAuthUser(),
+        ]);
+    }
+
+    /**
+     * Show the application news page.
+     *
+     * @return \Illuminate\Contracts\Support\Renderable
+     */
+    public function news()
+    {
+
+        return view('news', [
+            'magazine_categories' => $this->getMagazineCategories(),
+            'random_products' => $this->getMagazineRandomProducts(),
             'logged_user' => $this->getAuthUser(),
         ]);
     }

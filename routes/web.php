@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\URL;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\MailController;
 
 // URL::forceScheme('https');
 //Illuminate\Routing\UrlGenerator::forceSchema('https');
@@ -11,16 +12,14 @@ use App\Http\Controllers\HomeController;
 //})->middleware(['auth'])->name('dashboard');
 
 Route::get('/dashboard', [HomeController::class, 'index'])->middleware(['auth'])->name('home');
-
-//Route::get('/category', function () {
-//    return view('category');
-//})->name('category');
+Route::get('/mail', [MailController::class, 'send'])->name('send');
 
 require __DIR__ . '/auth.php';
 
-Route::prefix('orders')->namespace('App\Http\Controllers')->name('orders/')->group(static function () {
-    Route::get('/{orderIndex}', 'OrderController@view')->name('view');
+Route::prefix('orders')->namespace('App\Http\Controllers')->name('orders.')->group(static function () {
     Route::get('/', 'OrderController@index')->name('index');
+    Route::get('/{orderIndex}', 'OrderController@view')->name('view');
+    Route::get('/page/{indexPage}', 'OrderController@index')->name('index.page');
 });
 
 Route::prefix('category')->namespace('App\Http\Controllers')->name('category/')->group(static function () {
@@ -129,6 +128,8 @@ Route::middleware(['auth:' . config('admin-auth.defaults.guard'), 'admin'])->gro
 
 Route::namespace('App\Http\Controllers')->name('home/')->group(static function () {
     Route::get('/', 'HomeController@index')->name('home.index');
+    Route::get('/about', 'HomeController@about')->name('about');
+    Route::get('/news', 'HomeController@news')->name('news');
     Route::get('/logout', 'HomeController@logout')->name('home.logout');
     Route::get('/page/{indexPage}', 'HomeController@index')->name('home.index');
 });

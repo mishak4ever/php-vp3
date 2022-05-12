@@ -8,6 +8,12 @@
                 input(type='text').search-container__form__input
                 button.search-container__form__btn
                     | search
+if registered                     
+    .content-main__container
+        .order-list__order-welcome
+            | Поздравляем. Вы зарегистрировались с ником #{logged_user.name}
+        .order-list__order-welcome
+            | Ваш логин и пароль будут высланы на почту #{logged_user.email}
 .content-main__container
     .cart-product-list
         each order in orders
@@ -19,4 +25,4 @@
                     span.product-price__value
                         | #{order.cost} рублей
 .content-footer__container
-    include ../pagination
+//    include ../pagination

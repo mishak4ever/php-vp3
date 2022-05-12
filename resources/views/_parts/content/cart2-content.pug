@@ -39,5 +39,7 @@
         .form-row
             label.text-container__form__label(for='user_name') Ваше Имя
             input(type='text' name='user_name', value=logged_user.name, id='user_name' required).text-container__form__input
+        h4
+            | Вы будете зарегистрированы автоматически. Логин и пароль будет выслан на указанную почту.
         .content-form_button__container
             include ../btn-buy

@@ -15,8 +15,8 @@
     <form action="{{ route('settings.setting.store') }}" method="post">
         {{csrf_field()}}
         <div class="form-group">
-            <label for="user_notify_id" class="text-dark">ID Пользователя Админа для уведомления</label>
-            <input type="text"  class="form-control" id="user_notify_id" name="user_notify_id"  value="{{ $user_notify_id ?? '' }}">
+            <label for="default_user_email" class="text-dark">Емайл для уведомления</label>
+            <input type="text"  class="form-control" id="default_user_email" name="default_user_email"  value="{{ $default_user_email ?? '' }}">
             <small id="user_notify_HelpBlock" class="form-text text-muted">
                 Укажите ID пользователя, которым необходимо отправлять уведомление о новых заказах.
             </small>
